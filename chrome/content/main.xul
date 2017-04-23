@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+
+<window id="main" title="My App" width="800" height="600" 
+xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+onunload="doClose()" persist="screenX screenY width height sizemode" 
+onload="doInit()" windowtype="xulmine" >
+
+<script  src="sqlite.js" />
+<script  src="main.js" />
+<script  src="nbsqlite.js"/>
+<script  src="nbhttp.js"/>
+
+<script src="notabene.js" />
+
+<keyset>
+
+<key key="t"  modifiers="control"  oncommand="openToday()" />
+
+
+<key key="s"  modifiers="control"  oncommand="doSaveCurrentText()" />
+<key keycode="VK_F2" oncommand="doSaveCurrentText()"/>
+
+<key key="f"  modifiers="control"  oncommand="openFindWindow()" />
+<key keycode="VK_F9" oncommand="openFindWindow()"/>
+
+<key key="q"  modifiers="control"  oncommand="window.close()" />
+
+<key key="r"  modifiers="control"    oncommand="doRefresh()"/>
+<key keycode="VK_F5" oncommand="doRefresh()"/>
+
+
+<key keycode="VK_F9" oncommand="nbOpenNewWindow(0)"/>
+</keyset>
+
+<menubar id="sample-menubar">
+  
+  <menu id="file-menu1" label="File">
+    <menupopup id="file-popup">
+      <menuitem label="New     Ctrl+N" oncommand="addChildNote()"/>
+      <menuitem label="Open"/>
+      <menuitem label="Save Ctrl+S" oncommand="doSaveCurrentText()"/>
+   
+      <menuseparator/>
+      <menuitem label="Exit Ctrl+Q" oncommand="window.close()"/>
+    </menupopup>
+  </menu>
+  
+  <menu id="edit-menu2" label="Edit">
+    <menupopup id="file-popup2">
+      <menuitem label="Rename item" oncommand="renameCurrentNote()"/>
+      <menuitem label="Cut for paste"/>
+      <menuitem label="Move (cutted from paste)"/>
+    </menupopup>
+  </menu>
+  
+    <menu id="edit-menu3" label="View">
+    <menupopup id="file-popup3">
+      <menuitem label="Calendar Today Ctrl+T" oncommand="openToday()"/>
+       <menuitem label="Refresh Ctrl+R" oncommand="doRefresh()"/>
+      </menupopup>
+  </menu>
+  
+  
+  
+</menubar>
+
+ <popup id="popup">
+      <menuitem label="New     Ctrl+N" oncommand="addChildNote()"/>
+      <menuitem label="Open"/>
+      <menuitem label="Save Ctrl+S" oncommand="doSaveCurrentText()"/>
+      <menuitem label="Refresh Ctrl+R" oncommand="doRefresh()"/>
+      <menuitem label="Rename item" oncommand="renameCurrentNote()"/>
+</popup>
+
+<hbox flex="1">
+<tree id="nbTree" seltype="primary" flex="1" context="popup">
+<treecols><treecol flex="1" primary="true">Заметка</treecol></treecols>
+
+<treechildren id="ch">
+<treeitem container="true" open="false">
+   <treerow>
+     <treecell label="MyText"> </treecell>
+  </treerow>
+  <treechildren>
+  <treeitem>
+     <treerow>
+     <treecell label="Text2"> </treecell>
+  </treerow>
+  </treeitem>
+</treechildren>
+</treeitem>
+
+
+</treechildren>
+</tree>
+
+<splitter collapse="before"> <grippy /> </splitter>
+
+<textbox id="nbText" multiline="true" flex="1"/>
+
+</hbox>
+<statusbar>
+ <statusbarpanel flex="1" id="statusText" label="statusBarText" />
+</statusbar>
+  
+  
+</window>

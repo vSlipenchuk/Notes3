@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://myapp/content/example3.css" type="text/css"?>
+
+<window id="findWindow" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    onload="onLoad()" title="Find Objects"
+    persist="screenX screenY width height sizemode"    width="600" height="400"
+    >
+    
+<script  src="sqlite.js" />
+<script  src="main.js" />
+<script  src="nbsqlite.js"/>
+<script src="notabene.js" />
+<script src="findForm.js" />
+
+
+  <vbox flex="1">
+<hbox flex="0">
+<textbox id="searchText" value="Hello" flex="1"  onkeyup="textKeyUp(event)"  />
+<textbox id="limitResults" value="100" flex="0"  onkeyup="textKeyUp(event)"  />
+</hbox>
+
+<tree id="searchTree" flex="1" seltype="single" onselect="rowSelected()">
+        <treecols>
+        <treecol id="NAME" label="Наименование" primary="true" flex="1" />
+	<treecol id="CREATED" label="Создан" primary="true" flex="1" />
+	</treecols>
+        <treechildren flex="1"/>
+</tree>
+
+<splitter collapse="before" ><grippy /></splitter>
+
+<textbox id="NoteText" flex="1" multiline="true"/>
+</vbox>
+
+
+</window>
+

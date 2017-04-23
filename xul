@@ -1,0 +1,66 @@
+
+
+# files for editing on ./xul ed
+ED_FILES="xul chrome/context/main.xul chrome/content/sqlite.js chrome/content/main.js"
+
+make_main() {
+cat << EOF
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window id="main" title="My App" width="300" height="300"
+xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <caption label="Hello World"/>
+</window>
+EOF
+}
+
+make_application_ini() {
+cat << EOF 
+[App]
+Vendor=vslipenchuk
+Name=Test App
+Version=1.0
+BuildID=20060101
+Copyright=Copyright (c) 2017 Vladimir Slipenchuk
+ID=vslipenchuk@gmail.com
+
+[Gecko]
+MinVersion=1.8
+MaxVersion=1.10.0.*
+EOF
+}
+
+make_chrome_manifest() {
+cat <<EOF 
+content myapp file:content/
+EOF
+}
+
+make_prefs_js() {
+cat <<EOF
+pref("toolkit.defaultChromeURI", "chrome://myapp/content/main.xul");
+EOF
+}
+
+
+case "$1" in
+  init)
+    mkdir -p chrome/content defaults/preferences
+    [ -r application.ini ] || ( make_application_ini > application.ini )
+    [ -r chrome/chrome.manifest ] || ( make_chrome_manifest > chrome/chrome.manifest )
+    [ -r chrome/content/main.xul ] || ( make_main > chrome/content/main.xul )
+    [ -r defaults/preferences/prefs.js ] || ( make_prefs_js > defaults/preferences/prefs.js )
+    
+    ;;
+  run) 
+    shift
+    xulrunner application.ini $*
+    ;;
+  ed*)
+    scite $ED_FILES &
+    ;;
+  *)
+    echo "usage: init|run"
+    ;;
+esac
