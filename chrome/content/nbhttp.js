@@ -13,41 +13,34 @@
 */
 
 
-function nbHttp(_path,_up,_name) { // database file name, root connection name of this db
+function nbHttp(_path,_up,_name,_username,_password) { // database file name, root connection name of this db
 var nb = {
     name:_name,
     path:_path,
     up:_up,
-    init:function() {	    
+    username:_username,
+    password:_password,
+    init:function() {	   
 	    if (!this.name) this.name = this.path;
 	    //if (this.path.substr( corrent to http/s:// ?
 	    //this.db = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance();
 	    return true;
 	    },
     renameNote:function (id, name) {
-	    var db = this.db;
-	    alert("rename id="+id+" to name ="+name);
-	    if (db.execSQL ('update nb set name=?2 where n=?1',id,name)) {
-	       alert("exec OK!");
-	       } else alert("exec failed");
-	    
+	     //alert('renameNote?n='+id+'&txt='+name);
+	     return this.wget('renameNote?n='+id+'&txt='+encodeURIComponent(name));
             },
-    addNote:function (up, name, txt) {
-	    var db = this.db;
-	    var n = db.nextN('nb');
-	    if (!txt) txt = "";
-	    alert("adding new up="+up+" to name ="+name+' as N='+n);
-	    if (db.execSQL('insert into nb(N,UP,NAME,TXT) values(?1,?2,?3,?4)',n,up,name,txt)) {
-	       alert("exec OK!");
-	       } else alert("exec failed");
-	    },
-     saveNoteText:function(id,txt) {
-	     alert("save note text="+id+" text="+txt);
-	    return  this.db.execSQL('update nb set txt=?2 where n=?1',id,txt ) ;
+    addNote:function (id, name) {
+	     return this.wget('addNote?up='+id+'&name='+encodeURIComponent(name));
+            },
+    saveNoteText:function(id,txt) {
+	    //alert('Save :saveNoteText?n='+id+"&txt="+encodeURIComponent(txt));
+	     return this.wget('saveNoteText?n='+id+"&txt="+encodeURIComponent(txt));	    
      },
     getNote:function(id) { // get note detail
 	    var t = this.wget('getNote/'+id);
 	    if (!t) return t;
+	    //t.[0].nb=this;
 	    return t[0];
     },
     searchText:function(txt,limit) {
@@ -57,7 +50,10 @@ var nb = {
     var ex;
 	try {
 	    var request = new XMLHttpRequest();
-            request.open('GET', 'http://'+this.path+'/'+url, false);  // `false` makes the request synchronous
+	    if (this.username) 
+                request.open('GET', 'http://'+this.path+'/'+url, false,this.username,this.password);  // `false` makes the request synchronous
+	    else 
+		 request.open('GET', 'http://'+this.path+'/'+url, false);  // `false` makes the request synchronous
             request.send(null);
 	    if (request.status != 200) return []; // error
 	         var t=request.responseText;

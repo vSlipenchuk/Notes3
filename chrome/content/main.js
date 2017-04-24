@@ -132,6 +132,7 @@ var path = Nt.getPath(Obj);
 	//alert(toString(path).escape());
  prefSet('path', escape(path) ) ;// save last opened
 	
+	
 //txt.value = obj.txt;
 	 //alert(obj);
   //alert('selected id='+obj.data.id+' and name='+obj.data.name);	
@@ -142,13 +143,13 @@ var txt = document.getElementById('nbText');
 	//alert("Saving!");
 
 if ( Obj.data.nb.saveNoteText( Obj.data.id, txt.value) ) {  // save to database !
-	//alert("Saved OK");
+   setStatusText('saved ok:' +(new Date())+' id:'+Obj.data.id);
    }
 
 }
 
 function renameCurrentNote() {
-var name;
+var name,ex;
 	//alert("Renaming here!");
 	if (!Obj) return;
 	//alert("Obj="+Obj);
@@ -159,13 +160,19 @@ name = prompt("Change name ID="+Obj.data.id,name);
 if (!name) return ;
   var p = Nt.getPath(Obj); 
 	
-var ok = Obj.data.nb.renameNote( Obj.data.id, name);
+	try {
 	
+	alert("update path=p nb="+Obj.data.nb+" renameNote="+Obj.data.nb.renameNote);
+	var nb=Obj.data.nb;
+	//alert('nb='+nb);
+var ok = nb.renameNote(Obj.data.id,name);
+	//ok = nb.addNote(1,'2','3');
+	//alert("done?");
 	Nt.refreshChilds (  Nt.getParentObject ( Obj )  ) ; // refresh nodes
 //alert("OK changed!");
 	
 	Nt.setPath ( p); //.split('/').slice(1) ); // set path again
-	
+	} catch(ex) { alert(ex);}
 }
 
 function addChildNote() {
